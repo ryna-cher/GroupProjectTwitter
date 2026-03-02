@@ -1,31 +1,25 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Вход — Threads</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
-    <div class="main-container">
-        <header>
-            <h1>Threads</h1>
-        </header>
+{% extends 'base.html' %}
 
-        <section class="auth-form-container" style="padding: 20px;">
-            <h2 style="text-align: center; margin-bottom: 30px;">Вход</h2>
-            <form method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    {{ form.as_p }}
-                </div>
-                <button type="submit" class="post-btn" style="width: 100%; margin-top: 20px; padding: 12px;">Войти</button>
-            </form>
+{% block title %}Вхід{% endblock %}
 
-            <p style="text-align: center; margin-top: 30px; color: var(--text-muted);">
-                Нет аккаунта? <a href="{% url 'register' %}" style="color: white; text-decoration: none; font-weight: bold;">Зарегистрироваться</a>
-            </p>
-        </section>
-    </div>
-</body>
-</html>
+{% block content %}
+
+<section class="auth-form-container" style="padding:20px;">
+
+<h2 style="text-align:center; margin-bottom:30px;">Вхід</h2>
+
+<form method="post">
+
+{% csrf_token %}
+
+{{ form.as_p }}
+
+<button type="submit" class="post-btn" style="width:100%; margin-top:20px;">
+Увійти
+</button>
+
+</form>
+
+</section>
+
+{% endblock %}

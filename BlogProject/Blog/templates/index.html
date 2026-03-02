@@ -1,101 +1,121 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nothing</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
 
-    <div class="main-container">
-    <header style="display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border-color);">
-        <h1 style="margin: 0; font-size: 24px;">Threads</h1>
+{% block title %}Головна{% endblock %}
 
-        <div class="auth-navigation">
-            {% if user.is_authenticated %}
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <span style="color: var(--text-muted); font-size: 14px;">{{ user.username }}</span>
+{% block content %}
 
-                    <form action="{% url 'logout' %}" method="post" style="margin: 0;">
-                        {% csrf_token %}
-                        <button type="submit" style="background: none; border: none; cursor: pointer; font-size: 20px;" title="Выйти">🚪</button>
-                    </form>
-                </div>
-            {% else %}
-                <div style="display: flex; gap: 15px;">
-                    <a href="{% url 'login' %}" style="text-decoration: none; color: var(--text-main); font-weight: 600; font-size: 14px;">Вход</a>
-                    <a href="{% url 'register' %}" style="text-decoration: none; color: var(--text-muted); font-weight: 600; font-size: 14px;">Регистрация</a>
-                </div>
-            {% endif %}
+<section class="create-post-area">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-header">
+
+            <div class="avatar-placeholder">
+                {% if user.avatar %}
+                    <img src="{{ user.avatar.url }}">
+                {% else %}
+                    <div class="no-avatar"></div>
+                {% endif %}
+            </div>
+
+            <textarea name="text" placeholder="що нового?" required></textarea>
+
         </div>
-    </header>
+
+        <div class="form-footer">
+
+            <label for="file-input">
+                🖇️
+                <input type="file" name="image" id="file-input" style="display:none;">
+            </label>
+
+            <button type="submit" class="post-btn">Публікувати</button>
+
+        </div>
+    </form>
+</section>
 
 
-        <section class="create-post-area">
-            <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="form-header">
-                    <div class="avatar-placeholder">
-                        {% if user.avatar %}
-                            <img src="{{ user.avatar.url }}" alt="avatar">
-                        {% else %}
-                            <div class="no-avatar"></div>
-                        {% endif %}
-                    </div>
-                    <textarea name="text" placeholder="що нового?" required></textarea>
-                </div>
+<main class="feed">
 
-                <div class="form-footer">
-                    <div class="upload-icons">
-                        <label for="file-input" class="file-label">
-                            <span>🖇️</span>
-                            <input type="file" name="image" id="file-input" style="display:none;">
-                        </label>
-                    </div>
-                    <button type="submit" class="post-btn">Публікувати</button>
-                </div>
-            </form>
-        </section>
+{% for post in posts %}
 
-        <main class="feed">
-            {% for post in posts %}
-                <article class="post-card">
-                    <div class="post-header">
-                        <div class="author-info">
-                            <div class="avatar-placeholder">
-                                {% if post.author.avatar %}
-                                    <img src="{{ post.author.avatar.url }}" alt="author">
-                                {% endif %}
-                            </div>
-                            <span class="author-name">{{ post.author.username }}</span>
-                        </div>
-                        <span class="post-date">{{ post.created_at|timesince }} назад</span>
-                    </div>
+<article class="post-card">
 
-                    <div class="post-content">
-                        {{ post.text }}
-                    </div>
+<div class="post-header">
 
-                    {% if post.image %}
-                        <div class="post-image-container">
-                            <img src="{{ post.image.url }}" class="post-image">
-                        </div>
-                    {% endif %}
+<div class="author-info">
 
-                    <div class="post-footer">
-                        <div class="action-item"><span>♥</span> <b>{{ post.likes.count }}</b></div>
-                        <div class="action-item"><span>Відповісти</span> <b>{{ post.comments.count }}</b></div>
-                    </div>
-                </article>
-            {% empty %}
-                <div class="empty-state">
-                    <p>Нема чого дивитись...</p>
-                </div>
-            {% endfor %}
-        </main>
-    </div>
+<div class="avatar-placeholder">
+{% if post.author.avatar %}
+<img src="{{ post.author.avatar.url }}">
+{% endif %}
+</div>
 
-</body>
-</html>
+<span class="author-name">{{ post.author.username }}</span>
+
+</div>
+
+<span class="post-date">{{ post.created_at|timesince }} назад</span>
+
+</div>
+
+
+<div class="post-content">
+{{ post.text }}
+</div>
+
+
+{% if post.image %}
+<div class="post-image-container">
+<img src="{{ post.image.url }}" class="post-image">
+</div>
+{% endif %}
+
+
+<div class="post-footer">
+
+{% if user.is_authenticated %}
+
+<form action="{% url 'like_post' post.id %}" method="post">
+{% csrf_token %}
+
+<button type="submit" style="background:none;border:none;cursor:pointer;font-size:18px;">
+
+{% if user in post.likes.all %}
+<span style="color:red;">♥</span>
+{% else %}
+<span>♥</span>
+{% endif %}
+
+<b>{{ post.likes.count }}</b>
+
+</button>
+
+</form>
+
+{% else %}
+
+<a href="{% url 'login' %}">
+♥ {{ post.likes.count }}
+</a>
+
+{% endif %}
+
+
+<a href="{% url 'post_detail' post.id %}" class="action-item">
+💬 <b>{{ post.comments.count }}</b>
+</a>
+
+</div>
+
+</article>
+
+{% empty %}
+<p>Нема чого дивитись...</p>
+{% endfor %}
+
+</main>
+
+{% endblock %}

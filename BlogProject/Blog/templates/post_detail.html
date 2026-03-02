@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}Пост{% endblock %}
+
+{% block content %}
+
+<article class="post-card">
+
+<div class="post-header">
+
+<div class="author-info">
+
+<div class="avatar-placeholder">
+{% if post.author.avatar %}
+<img src="{{ post.author.avatar.url }}">
+{% endif %}
+</div>
+
+<span class="author-name">{{ post.author.username }}</span>
+
+</div>
+
+<span class="post-date">{{ post.created_at|timesince }} назад</span>
+
+</div>
+
+
+<div class="post-content">
+{{ post.text }}
+</div>
+
+{% if post.image %}
+<div class="post-image-container">
+<img src="{{ post.image.url }}" class="post-image">
+</div>
+{% endif %}
+
+</article>
+
+
+<h2 style="margin-top:40px;">Коментарі</h2>
+
+{% for comment in comments %}
+
+<div class="post-card">
+
+<b>{{ comment.author.username }}</b>
+
+<p>{{ comment.text }}</p>
+
+<small>{{ comment.created_at|timesince }} назад</small>
+
+</div>
+
+{% empty %}
+
+<p>Коментарів ще немає</p>
+
+{% endfor %}
+
+
+{% if user.is_authenticated %}
+
+<h3 style="margin-top:30px;">Додати коментар</h3>
+
+<form action="{% url 'add_comment' post.id %}" method="post">
+
+{% csrf_token %}
+
+<textarea name="text" required style="width:100%;height:80px;"></textarea>
+
+<button type="submit" class="post-btn" style="margin-top:10px;">
+Додати коментар
+</button>
+
+</form>
+
+{% else %}
+
+<p>
+Щоб написати коментар
+<a href="{% url 'login' %}">увійдіть</a>
+</p>
+
+{% endif %}
+
+{% endblock %}

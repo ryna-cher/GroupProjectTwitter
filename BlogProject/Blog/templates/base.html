@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Threads{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+<div class="main-container">
+
+<header style="display:flex; justify-content:space-between; align-items:center; padding:20px 0; border-bottom:1px solid var(--border-color);">
+
+    <h1 style="margin:0; font-size:24px;">
+        <a href="{% url 'index' %}" style="text-decoration:none; color:inherit;">Threads</a>
+    </h1>
+
+    <div class="auth-navigation">
+
+        {% if user.is_authenticated %}
+            <div style="display:flex; align-items:center; gap:15px;">
+
+                <span style="color:var(--text-muted); font-size:14px;">
+                    {{ user.username }}
+                </span>
+
+                <a href="{% url 'profile' %}" style="text-decoration:none; font-size:20px;">
+                    👤
+                </a>
+
+                <form action="{% url 'logout' %}" method="post" style="margin:0;">
+                    {% csrf_token %}
+                    <button type="submit"
+                        style="background:none; border:none; cursor:pointer; font-size:20px;"
+                        title="Вийти">
+                        🚪
+                    </button>
+                </form>
+
+            </div>
+
+        {% else %}
+
+            <div style="display:flex; gap:15px;">
+                <a href="{% url 'login' %}" style="text-decoration:none; font-weight:600;">Вхід</a>
+                <a href="{% url 'register' %}" style="text-decoration:none; font-weight:600;">Реєстрація</a>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</header>
+
+
+<main>
+
+{% block content %}
+{% endblock %}
+
+</main>
+
+
+<footer style="margin-top:40px; padding:20px 0; border-top:1px solid var(--border-color); text-align:center; color:var(--text-muted); font-size:14px;">
+    <p>Threads</p>
+</footer>
+
+</div>
+
+</body>
+</html>
