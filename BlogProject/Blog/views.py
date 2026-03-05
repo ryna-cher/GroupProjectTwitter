@@ -45,6 +45,19 @@ def profile(request):
 
     return render(request, 'profile.html', context)
 
+def user_profile(request, username):
+    profile_user = get_object_or_404(User, username=username)
+    posts = profile_user.posts.all().order_by('-created_at').order_by('-created_at')
+
+
+
+    context = {
+        'profile_user': profile_user,
+        'posts': posts,
+    }
+
+    return render(request, 'profile.html', context)
+
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
 
