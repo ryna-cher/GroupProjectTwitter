@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Редагувати профіль{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="profile-container">
+
+    <h1>Редагування профілю</h1>
+
+    <form method="post" enctype="multipart/form-data" class="profile-form">
+
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit">Зберегти зміни</button>
+    </form>
+
+    <a href="{% url 'profile' %}">Назад до профілю</a>
+
+</div>
+
+{% endblock %}

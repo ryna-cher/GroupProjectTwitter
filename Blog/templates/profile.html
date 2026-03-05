@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Профіль {{ profile_user.username }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="profile-container">
+
+    {% if profile_user.avatar %}
+        <img src="{{ profile_user.avatar.url }}" alt="Avatar" class="profile-avatar">
+    {% else %}
+        <div style="width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 15px auto;"></div>
+    {% endif %}
+
+    <h2>{{ profile_user.username }}</h2>
+
+    <div class="profile-info">
+        {% if request.user == profile_user %}
+        <p>Email: {{ profile_user.email }}</p>
+        {% endif %}
+        <p>Постів: {{ posts.count }}</p>
+    </div>
+
+    {% if request.user == profile_user %}
+    <div class="profile-buttons">
+        <a href="{% url 'edit_profile' %}"><button class="edit-btn">Редагувати профіль</button></a>
+        <a href="{% url 'delete_profile' %}"><button class="delete-btn">Видалити профіль</button></a>
+    </div>
+    {% endif %}
+
+</div>
+
+<h3 style="margin-top: 40px;">Пости користувача</h3>
+
+{% for post in posts %}
+    <article class="post-card">
+        <div class="post-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
+            <div class="post-author-avatar">
+                {% if post.author.avatar %}
+                    <img src="{{ post.author.avatar.url }}" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover;">
+                {% else %}
+                    <div style="width: 45px; height: 45px; background: #eee; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #888; font-size: 12px;">
+                        No фото
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="post-meta">
+                <a href="{% url 'user_profile' post.author.username %}" style="text-decoration: none; color: #333; font-weight: bold; display: block;">
+                    {{ post.author.username }}
+                </a>
+                <span class="post-date" style="font-size: 12px; color: #999;">{{ post.created_at|timesince }} назад</span>
+            </div>
+        </div>
+
+        <div class="post-content">
+            {{ post.text }}
+        </div>
+
+        {% if post.image %}
+        <div class="post-image-container" style="margin-top: 10px;">
+            <img src="{{ post.image.url }}" class="post-image" style="max-width: 100%; border-radius: 8px;">
+        </div>
+        {% endif %}
+
+        <div style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
+            <a href="{% url 'post_detail' post.id %}" style="text-decoration: none; color: #007bff; font-size: 14px;">
+                Читати коментарі ({{ post.comments.count }})
+            </a>
+        </div>
+    </article>
+{% empty %}
+    <p>Цей користувач ще не написав жодного посту.</p>
+{% endfor %}
+
+{% endblock %}
