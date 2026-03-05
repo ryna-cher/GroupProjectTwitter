@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
-from .forms import MyUserCreationForm
+from .forms import MyUserCreationForm, ProfileEditForm
 from .models import Post, Comment
 from django.contrib.auth import get_user_model
 
@@ -85,3 +85,37 @@ def add_comment(request, pk):
             )
 
     return redirect('post_detail', pk=pk)
+
+
+@login_required
+def edit_profile(request):
+
+    user = request.user
+
+    if request.method == 'POST':
+        form = ProfileEditForm(request.POST, request.FILES, instance=user)
+
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+
+    else:
+        form = ProfileEditForm(instance=user)
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'edit_profile.html', context)
+
+
+@login_required
+def delete_profile(request):
+
+    user = request.user
+
+    if request.method == 'POST':
+        user.delete()
+        return redirect('index')
+
+    return render(request, 'delete_profile.html')

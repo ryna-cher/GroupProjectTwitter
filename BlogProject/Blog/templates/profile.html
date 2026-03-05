@@ -1,22 +1,30 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Профіль{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
 
 {% block content %}
 
-<h1>Профіль</h1>
+<div class="profile-container">
 
-<div>
+    {% if profile_user.avatar %}
+        <img src="{{ profile_user.avatar.url }}" alt="Avatar" class="profile-avatar">
+    {% endif %}
 
-{% if profile_user.avatar %}
-<img src="{{ profile_user.avatar.url }}" width="100">
-{% endif %}
+    <h2>{{ profile_user.username }}</h2>
 
-<h2>{{ profile_user.username }}</h2>
+    <div class="profile-info">
+        <p>Email: {{ profile_user.email }}</p>
+        <p>Постів: {{ posts.count }}</p>
+    </div>
 
-<p>Email: {{ profile_user.email }}</p>
-
-<p>Постів: {{ posts.count }}</p>
+    <div class="profile-buttons">
+        <a href="{% url 'edit_profile' %}"><button class="edit-btn">Редагувати профіль</button></a>
+        <a href="{% url 'delete_profile' %}"><button class="delete-btn">Видалити профіль</button></a>
+    </div>
 
 </div>
 

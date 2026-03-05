@@ -1,0 +1,124 @@
+.profile-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 15px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.profile-container h1,
+.profile-container h2 {
+    text-align: center;
+    color: #111;
+}
+
+.profile-avatar {
+    display: block;
+    margin: 0 auto 20px auto;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border-color);
+}
+
+.profile-info p {
+    font-size: 16px;
+    margin: 5px 0;
+    color: #333;
+}
+
+.profile-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.profile-buttons a button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.profile-buttons a .edit-btn {
+    background-color: #000;
+    color: #fff;
+}
+
+.profile-buttons a .edit-btn:hover {
+    opacity: 0.85;
+}
+
+.profile-buttons a .delete-btn {
+    background-color: #e74c3c;
+    color: #fff;
+}
+
+.profile-buttons a .delete-btn:hover {
+    opacity: 0.85;
+}
+
+/* Форма редагування */
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.profile-form label {
+    font-size: 14px;
+    color: #555;
+}
+
+.profile-form input[type="text"],
+.profile-form input[type="email"],
+.profile-form input[type="file"] {
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    font-size: 14px;
+}
+
+.profile-form input:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.profile-form button {
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: #000;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.profile-form button:hover {
+    opacity: 0.85;
+}
+
+.delete-confirm {
+    text-align: center;
+}
+
+.delete-confirm button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    background: #e74c3c;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.delete-confirm button:hover {
+    opacity: 0.85;
+}
