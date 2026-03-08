@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Пост{% endblock %}
 
@@ -6,94 +7,100 @@
 
 <article class="post-card">
 
-<div class="post-header">
+    <div class="post-header">
+        <div class="author-info">
+            <div class="avatar-placeholder">
+                {% if post.author.avatar %}
+                <a href="{% url 'user_profile' post.author.username %}">
+                    <img src="{{ post.author.avatar.url }}" alt="avatar">
+                </a>
+                {% endif %}
+            </div>
 
-<div class="author-info">
-
-    <div class="avatar-placeholder">
-    {% if post.author.avatar %}
-    <a href="{% url 'user_profile' post.author.username %}">
-        <img src="{{ post.author.avatar.url }}">
-    </a>
-    {% endif %}
+            <a href="{% url 'user_profile' post.author.username %}" class="author-name-link">
+                <span class="author-name">{{ post.author.username }}</span>
+            </a>
+        </div>
+        <span class="post-date">{{ post.created_at|timesince }} назад</span>
     </div>
 
-    <a href="{% url 'user_profile' post.author.username %}" style="text-decoration: none; color: inherit;">
-        <span class="author-name">{{ post.author.username }}</span>
-    </a>
+    <div class="post-content">
+        {{ post.text }}
+    </div>
 
-</div>
-
-<span class="post-date">{{ post.created_at|timesince }} назад</span>
-
-</div>
-
-
-<div class="post-content">
-{{ post.text }}
-</div>
-
-{% if post.image %}
-<div class="post-image-container">
-<img src="{{ post.image.url }}" class="post-image">
-</div>
-{% endif %}
+    {% if post.image %}
+    <div class="post-image-container">
+        <img src="{{ post.image.url }}" class="post-image" alt="post image">
+    </div>
+    {% endif %}
 
 </article>
 
+<h2 class="comments-title">Коментарі</h2>
 
-<h2 style="margin-top:40px;">Коментарі</h2>
+<div class="comments-list">
+    {% for comment in comments %}
+    <div class="comment-card">
+        <div class="comment-avatar">
+            {% if comment.author.avatar %}
+                <img src="{{ comment.author.avatar.url }}" alt="avatar">
+            {% else %}
+                <div class="avatar-placeholder">No фото</div>
+            {% endif %}
+        </div>
+        <div class="comment-body">
+            <a href="{% url 'user_profile' comment.author.username %}" class="comment-author">{{ comment.author.username }}</a>
+            <p class="comment-text">{{ comment.text }}</p>
+            <small class="comment-time">{{ comment.created_at|timesince }} назад</small>
 
-{% for comment in comments %}
-<div class="post-card" style="display: flex; gap: 15px; align-items: flex-start;">
+            {% if user.is_authenticated %}
+            <button class="reply-btn" data-comment-id="{{ comment.id }}">Відповісти</button>
 
-    <div class="comment-avatar">
-        {% if comment.author.avatar %}
-            <img src="{{ comment.author.avatar.url }}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
-        {% else %}
-            <div style="width: 40px; height: 40px; background: #ddd; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #777;">
-                No фото
+            <form action="{% url 'add_comment_reply' post.id comment.id %}" method="post" class="reply-form" id="reply-form-{{ comment.id }}">
+                {% csrf_token %}
+                <textarea name="text" placeholder="Напишіть відповідь..." required></textarea>
+                <button type="submit" class="post-btn">Відправити</button>
+            </form>
+            {% endif %}
+        </div>
+
+        {% for reply in comment.replies.all %}
+        <div class="comment-reply">
+            <div class="comment-avatar">
+                {% if reply.author.avatar %}
+                    <img src="{{ reply.author.avatar.url }}" alt="avatar">
+                {% else %}
+                    <div class="avatar-placeholder">No фото</div>
+                {% endif %}
             </div>
-        {% endif %}
+            <div class="comment-body">
+                <a href="{% url 'user_profile' reply.author.username %}" class="comment-author">{{ reply.author.username }}</a>
+                <p class="comment-text">{{ reply.text }}</p>
+                <small class="comment-time">{{ reply.created_at|timesince }} назад</small>
+            </div>
+        </div>
+        {% endfor %}
     </div>
-
-    <div class="comment-body">
-        <a href="{% url 'user_profile' post.author.username %}" style="text-decoration: none; color: inherit;">
-            <span class="author-name">{{ post.author.username }}</span>
-        </a>
-        <p style="margin: 5px 0;">{{ comment.text }}</p>
-        <small style="color: #999;">{{ comment.created_at|timesince }} назад</small>
-    </div>
-
-</div>
-{% empty %}
+    {% empty %}
     <p>Коментарів ще немає</p>
-{% endfor %}
-
+    {% endfor %}
+</div>
 
 {% if user.is_authenticated %}
 
-<h3 style="margin-top:30px;">Додати коментар</h3>
-
 <form action="{% url 'add_comment' post.id %}" method="post">
-
-{% csrf_token %}
-
-<textarea name="text" required style="width:100%;height:80px;"></textarea>
-
-<button type="submit" class="post-btn" style="margin-top:10px;">
-Додати коментар
-</button>
-
+    {% csrf_token %}
+    <textarea name="text" required class="add-comment-textarea"></textarea>
+    <button type="submit" class="post-btn">Додати коментар</button>
 </form>
 
 {% else %}
-
 <p>
-Щоб написати коментар
-<a href="{% url 'login' %}">увійдіть</a>
+Щоб написати коментар, <a href="{% url 'login' %}">увійдіть</a>
 </p>
-
 {% endif %}
+
+
+<script src="{% static 'js/comments.js' %}"></script>
 
 {% endblock %}

@@ -68,7 +68,7 @@ def user_profile(request, username):
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    comments = post.comments.all().order_by('created_at')
+    comments = post.comments.filter(parent__isnull=True).order_by('created_at')
 
     context = {
         'post': post,
@@ -137,3 +137,19 @@ def delete_profile(request):
         user.delete()
         return redirect('index')
     return render(request, 'delete_profile.html')
+
+
+@login_required
+def add_comment_reply(request, post_id, comment_id):
+    post = get_object_or_404(Post, id=post_id)
+    parent_comment = get_object_or_404(Comment, id=comment_id)
+
+    if request.method == 'POST':
+        text = request.POST.get('text')
+        Comment.objects.create(
+            post=post,
+            author=request.user,
+            text=text,
+            parent=parent_comment
+        )
+    return redirect('post_detail', pk=post_id)
