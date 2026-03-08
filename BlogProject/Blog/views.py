@@ -5,6 +5,9 @@ from .forms import MyUserCreationForm, ProfileEditForm
 from .models import Post, Comment
 from django.contrib.auth import get_user_model
 
+from django.shortcuts import render, get_object_or_404
+from .models import Post
+
 User = get_user_model()
 
 
@@ -37,10 +40,13 @@ def profile(request):
     user = request.user
 
     posts = user.posts.all().order_by('-created_at')
-
+    total_likes = sum(post.likes.count() for post in posts)
+    total_dislikes = sum(post.likes.count() for post in posts)
     context = {
         'profile_user': user,
-        'posts': posts
+        'posts': posts,
+        'total_likes': total_likes,
+        'total_dislikes': total_dislikes,
     }
 
     return render(request, 'profile.html', context)
@@ -48,12 +54,15 @@ def profile(request):
 def user_profile(request, username):
     profile_user = get_object_or_404(User, username=username)
     posts = profile_user.posts.all().order_by('-created_at').order_by('-created_at')
-
+    total_likes = sum(post.likes.count() for post in posts)
+    total_dislikes = sum(post.likes.count() for post in posts)
 
 
     context = {
         'profile_user': profile_user,
         'posts': posts,
+        'total_likes': total_likes,
+        'total_dislikes': total_dislikes,
     }
 
     return render(request, 'profile.html', context)
