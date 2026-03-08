@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block title %}Редагувати профіль{% endblock %}
 
 {% block extra_css %}
@@ -7,21 +8,36 @@
 {% endblock %}
 
 {% block content %}
+<div class="profile-page">
+    <div class="profile-card profile-edit">
+        <h1 class="edit-title">Редагування профілю</h1>
 
-<div class="profile-container">
+        <form method="post" enctype="multipart/form-data" class="profile-form">
+            {% csrf_token %}
 
-    <h1>Редагування профілю</h1>
+            <!-- Username -->
+            <label for="{{ form.username.id_for_label }}">Username</label>
+            {{ form.username }}
 
-    <form method="post" enctype="multipart/form-data" class="profile-form">
+            <!-- Email -->
+            <label for="{{ form.email.id_for_label }}">Email</label>
+            {{ form.email }}
 
-        {% csrf_token %}
-        {{ form.as_p }}
+            <!-- Avatar -->
+            <label for="{{ form.avatar.id_for_label }}">Avatar</label>
+            <div class="avatar-edit">
+                {% if user.avatar %}
+                    <img src="{{ user.avatar.url }}" class="avatar-preview">
+                {% else %}
+                    <div class="avatar-placeholder"></div>
+                {% endif %}
+                {{ form.avatar }}
+            </div>
 
-        <button type="submit">Зберегти зміни</button>
-    </form>
+            <button type="submit" class="glass-btn">Зберегти зміни</button>
+        </form>
 
-    <a href="{% url 'profile' %}">Назад до профілю</a>
-
+        <a href="{% url 'profile' %}" class="glass-btn back-btn">Назад до профілю</a>
+    </div>
 </div>
-
 {% endblock %}

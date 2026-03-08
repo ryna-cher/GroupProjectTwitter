@@ -8,53 +8,76 @@
 
 {% block content %}
 
-<div class="profile-container">
+<div class="profile-page">
 
-    {% if profile_user.avatar %}
-        <img src="{{ profile_user.avatar.url }}" alt="Avatar" class="profile-avatar">
-    {% else %}
-        <div style="width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 15px auto;"></div>
-    {% endif %}
+<div class="profile-card dark-glass">
 
-    <h2>{{ profile_user.username }}</h2>
+    <div class="profile-header">
 
-    <div class="profile-info">
-        {% if request.user == profile_user %}
-        <p>Email: {{ profile_user.email }}</p>
-        {% endif %}
-        <p>Постів: {{ posts.count }}</p>
+        <div class="profile-avatar-wrapper">
+            {% if profile_user.avatar %}
+                <img src="{{ profile_user.avatar.url }}" class="profile-avatar">
+            {% else %}
+                <div class="avatar-placeholder"></div>
+            {% endif %}
+        </div>
+
+        <div class="profile-main">
+            <h2 class="username">{{ profile_user.username }}</h2>
+
+            <div class="profile-stats">
+                <div class="stat">
+                    <span class="stat-number">{{ posts.count }}</span>
+                    <span class="stat-label">Постів</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">{{ total_likes }}</span>
+                    <span class="stat-label">Лайків</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">{{ total_dislikes }}</span>
+                    <span class="stat-label">Дизлайків</span>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     {% if request.user == profile_user %}
-    <div class="profile-buttons">
-        <a href="{% url 'edit_profile' %}"><button class="edit-btn">Редагувати профіль</button></a>
-        <a href="{% url 'delete_profile' %}"><button class="delete-btn">Видалити профіль</button></a>
+    <div class="profile-actions">
+        <a href="{% url 'edit_profile' %}" class="glass-btn">Редагувати</a>
+        <a href="{% url 'delete_profile' %}" class="danger-btn">Видалити</a>
     </div>
     {% endif %}
 
 </div>
 
-<h3 style="margin-top: 40px;">Пости користувача</h3>
 
-{% for post in posts %}
-    <article class="post-card">
-        <div class="post-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
-            <div class="post-author-avatar">
-                {% if post.author.avatar %}
-                    <img src="{{ post.author.avatar.url }}" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover;">
-                {% else %}
-                    <div style="width: 45px; height: 45px; background: #eee; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #888; font-size: 12px;">
-                        No фото
-                    </div>
-                {% endif %}
-            </div>
+    <h3 class="posts-title">Пости користувача</h3>
 
-            <div class="post-meta">
-                <a href="{% url 'user_profile' post.author.username %}" style="text-decoration: none; color: #333; font-weight: bold; display: block;">
+
+   <div class="profile-posts grid-posts">
+
+    {% for post in posts %}
+    <article class="post-card dark-glass pulse-hover">
+
+        <div class="post-header">
+
+            {% if post.author.avatar %}
+                <img src="{{ post.author.avatar.url }}" class="post-avatar">
+            {% else %}
+                <div class="post-avatar-placeholder"></div>
+            {% endif %}
+
+            <div>
+                <a href="{% url 'user_profile' post.author.username %}" class="post-author">
                     {{ post.author.username }}
                 </a>
-                <span class="post-date" style="font-size: 12px; color: #999;">{{ post.created_at|timesince }} назад</span>
+                <div class="post-date">
+                    {{ post.created_at|timesince }} назад
+                </div>
             </div>
+
         </div>
 
         <div class="post-content">
@@ -62,19 +85,20 @@
         </div>
 
         {% if post.image %}
-        <div class="post-image-container" style="margin-top: 10px;">
-            <img src="{{ post.image.url }}" class="post-image" style="max-width: 100%; border-radius: 8px;">
-        </div>
+        <img src="{{ post.image.url }}" class="post-image">
         {% endif %}
 
-        <div style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
-            <a href="{% url 'post_detail' post.id %}" style="text-decoration: none; color: #007bff; font-size: 14px;">
-                Читати коментарі ({{ post.comments.count }})
-            </a>
-        </div>
+        <a href="{% url 'post_detail' post.id %}" class="comments-link">
+            Коментарі ({{ post.comments.count }})
+        </a>
+
     </article>
-{% empty %}
-    <p>Цей користувач ще не написав жодного посту.</p>
-{% endfor %}
+    {% empty %}
+    <p class="no-posts">Користувач ще не написав постів.</p>
+    {% endfor %}
+
+</div>
+
+</div>
 
 {% endblock %}

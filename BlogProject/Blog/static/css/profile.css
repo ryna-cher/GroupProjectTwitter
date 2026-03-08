@@ -1,124 +1,344 @@
-.profile-container {
-    max-width: 500px;
-    margin: 50px auto;
-    padding: 30px;
-    background: #fff;
-    border-radius: 15px;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+.profile-page {
+    max-width: 900px;
+    margin: 80px auto 0 auto;
+    padding: 0 15px;
 }
 
-.profile-container h1,
-.profile-container h2 {
-    text-align: center;
-    color: #111;
+.profile-card {
+    background: rgba(20,20,20,0.8);
+    color: #fff;
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    width: 70%;
+    margin: 0 auto 30px auto;
+    padding: 30px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.profile-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.profile-avatar-wrapper {
+    transition: transform 0.3s;
+}
+
+.profile-avatar-wrapper:hover .profile-avatar {
+    transform: scale(1.05);
 }
 
 .profile-avatar {
-    display: block;
-    margin: 0 auto 20px auto;
     width: 120px;
     height: 120px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid var(--border-color);
+    border: 2px solid rgba(255,255,255,0.3);
+    transition: transform 0.3s;
 }
 
-.profile-info p {
-    font-size: 16px;
-    margin: 5px 0;
-    color: #333;
+.avatar-placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg,#222,#111);
 }
 
-.profile-buttons {
+.username {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.profile-stats {
     display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
+    gap: 30px;
+    margin-top: 10px;
+    flex-wrap: wrap;
 }
 
-.profile-buttons a button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
+.stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255,255,255,0.05);
+    padding: 10px 18px;
+    border-radius: 12px;
+    min-width: 80px;
+    transition: background 0.2s, transform 0.2s;
+    cursor: default;
+}
+
+.stat:hover {
+    background: rgba(255,255,255,0.12);
+    transform: scale(1.05);
+}
+
+.stat-number {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: #aaa;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+.glass-btn {
+    padding: 10px 18px;
+    border-radius: 12px;
+    text-decoration: none;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    backdrop-filter: blur(6px);
     font-weight: 600;
-    transition: 0.2s;
+    transition: transform 0.2s, background 0.2s;
 }
 
-.profile-buttons a .edit-btn {
-    background-color: #000;
+.glass-btn:hover {
+    transform: scale(1.05);
+    background: rgba(255,255,255,0.15);
+}
+
+.danger-btn {
+    padding: 10px 18px;
+    border-radius: 12px;
+    background: #e74c3c;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.2s;
+}
+
+.danger-btn:hover {
+    transform: scale(1.05);
+}
+
+@media (max-width: 700px) {
+    .profile-header {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .profile-stats {
+        justify-content: center;
+        gap: 15px;
+    }
+}
+
+.post-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.post-avatar-placeholder {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #333;
+}
+
+.profile-posts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    justify-content: center;
+}
+
+
+
+.delete-confirm {
+    max-width: 500px;
+    margin: 60px auto;
+    padding: 40px 30px;
+    text-align: center;
+    background: rgba(20,20,20,0.8);
     color: #fff;
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.profile-buttons a .edit-btn:hover {
-    opacity: 0.85;
+.delete-confirm:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.7);
 }
 
-.profile-buttons a .delete-btn {
-    background-color: #e74c3c;
+.delete-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.delete-text {
+    font-size: 16px;
+    color: #ccc;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+.delete-form {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.delete-form .danger-btn {
+    min-width: 180px;
+}
+
+.delete-form .glass-btn {
+    min-width: 120px;
+}
+
+
+
+
+
+
+.profile-edit {
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 40px 30px;
+    text-align: center;
+    background: rgba(20,20,20,0.85);
     color: #fff;
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.profile-buttons a .delete-btn:hover {
-    opacity: 0.85;
+.profile-edit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.7);
 }
 
-/* Форма редагування */
+.edit-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
 .profile-form {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.profile-form label {
-    font-size: 14px;
-    color: #555;
-}
-
-.profile-form input[type="text"],
-.profile-form input[type="email"],
-.profile-form input[type="file"] {
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    font-size: 14px;
-}
-
-.profile-form input:focus {
-    outline: none;
-    border-color: #000;
-}
-
 .profile-form button {
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    background: #000;
+    align-self: center;
+    min-width: 180px;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-top: 20px;
+}
+
+
+
+.profile-form .helptext {
+    display: none;
+}
+
+.avatar-edit {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.avatar-preview {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255,255,255,0.3);
+}
+
+.avatar-placeholder {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg,#222,#111);
+}
+
+.profile-form input,
+.profile-form select,
+.profile-form textarea {
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.05);
     color: #fff;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
+    font-size: 14px;
+    outline: none;
+    transition: background 0.2s, border 0.2s;
 }
 
-.profile-form button:hover {
-    opacity: 0.85;
+.profile-form input:focus,
+.profile-form select:focus,
+.profile-form textarea:focus {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.5);
 }
 
-.delete-confirm {
-    text-align: center;
+.profile-posts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    justify-content: center;
 }
 
-.delete-confirm button {
-    padding: 12px 20px;
-    border: none;
-    border-radius: 10px;
-    background: #e74c3c;
+.profile-posts .post-card {
+    display: flex;
+    flex-direction: column;
+    background: rgba(20,20,20,0.8);
+    border-radius: 16px;
+    padding: 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+    overflow: hidden;
+}
+
+.profile-posts .post-content {
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 1.4;
     color: #fff;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
 }
 
-.delete-confirm button:hover {
-    opacity: 0.85;
+
+.profile-posts .post-image {
+    width: 100%;
+    max-height: 250px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 12px;
 }

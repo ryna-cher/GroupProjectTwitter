@@ -3,11 +3,17 @@
 
 {% block title %}Головна{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/feed.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
 {% block content %}
 
 <section class="create-post-area">
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
+
         <div class="form-header">
             <div class="avatar-placeholder">
                 {% if user.avatar %}
@@ -16,73 +22,104 @@
                     <div class="no-avatar"></div>
                 {% endif %}
             </div>
-            <textarea name="text" placeholder="що нового?" required></textarea>
+
+            <textarea name="text" placeholder="Що нового?" required></textarea>
         </div>
 
         <div class="form-footer">
-            <label for="file-input">
-                🖇️
-                <input type="file" name="image" id="file-input" style="display:none;">
+           <label for="file-input" class="upload-btn">
+                <i class="fa-regular fa-image"></i>
+                <span>Фото</span>
+                <input type="file" name="image" id="file-input">
             </label>
-            <button type="submit" class="post-btn">Публікувати</button>
+
+            <button type="submit" class="post-btn">
+                Публікувати
+            </button>
         </div>
+
     </form>
 </section>
 
 <main class="feed">
-    {% for post in posts %}
-    <article class="post-card">
-        <div class="post-header">
-            <div class="author-info">
-                <div class="avatar-placeholder">
-                    {% if post.author.avatar %}
-                        <img src="{{ post.author.avatar.url }}">
-                    {% else %}
-                        <div class="no-avatar"></div>
-                    {% endif %}
-                </div>
-                <a href="{% url 'user_profile' post.author.username %}" class="author-name">
-                    {{ post.author.username }}
-                </a>
+
+{% for post in posts %}
+
+<article class="post-card">
+
+    <div class="post-header">
+        <div class="author-info">
+            <div class="avatar-placeholder">
+                {% if post.author.avatar %}
+                    <img src="{{ post.author.avatar.url }}">
+                {% else %}
+                    <div class="no-avatar"></div>
+                {% endif %}
             </div>
-            <span class="post-date">{{ post.created_at|timesince }} назад</span>
-        </div>
-
-        <div class="post-content">
-            {{ post.text }}
-        </div>
-
-        {% if post.image %}
-        <div class="post-image-container">
-            <img src="{{ post.image.url }}" class="post-image">
-        </div>
-        {% endif %}
-
-        <div class="post-footer">
-            {% if user.is_authenticated %}
-            <form action="{% url 'like_post' post.id %}" method="post">
-                {% csrf_token %}
-                <button type="submit" style="background:none;border:none;cursor:pointer;font-size:18px;">
-                    {% if user in post.likes.all %}
-                        <span style="color:red;">❤️</span>
-                    {% else %}
-                        <span>🤍</span>
-                    {% endif %}
-                    <b>{{ post.likes.count }}</b>
-                </button>
-            </form>
-            {% else %}
-            <a href="{% url 'login' %}">❤️ {{ post.likes.count }}</a>
-            {% endif %}
-
-            <a href="{% url 'post_detail' post.id %}" class="action-item">
-                💬 <b>{{ post.comments.count }}</b>
+            <a href="{% url 'user_profile' post.author.username %}" class="author-name">
+                {{ post.author.username }}
             </a>
         </div>
-    </article>
-    {% empty %}
-        <p>Нема чого дивитись...</p>
-    {% endfor %}
+        <span class="post-date">{{ post.created_at|timesince }} назад</span>
+    </div>
+
+    <div class="post-content">
+        {{ post.text }}
+    </div>
+
+    {% if post.image %}
+    <div class="post-image-container">
+        <img src="{{ post.image.url }}" class="post-image">
+    </div>
+    {% endif %}
+
+    <div class="post-footer">
+        {% if user.is_authenticated %}
+
+        <form action="{% url 'like_post' post.id %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="like-btn">
+                {% if user in post.likes.all %}
+                    <i class="fa-solid fa-heart liked"></i>
+                {% else %}
+                    <i class="fa-regular fa-heart"></i>
+                {% endif %}
+                <b class="like-count">{{ post.likes.count }}</b>
+            </button>
+        </form>
+
+        <form action="{% url 'toggle_dislike' post.id %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="dislike-btn">
+                {% if user in post.dislikes.all %}
+                    <i class="fa-solid fa-thumbs-down disliked"></i>
+                {% else %}
+                    <i class="fa-regular fa-thumbs-down"></i>
+                {% endif %}
+                <b class="dislike-count">{{ post.dislikes.count }}</b>
+            </button>
+        </form>
+
+        {% else %}
+        <a href="{% url 'login' %}" class="like-btn">
+            <i class="fa-regular fa-heart"></i> <b class="like-count">{{ post.likes.count }}</b>
+        </a>
+        <a href="{% url 'login' %}" class="dislike-btn">
+            <i class="fa-regular fa-thumbs-down"></i> <b class="dislike-count">{{ post.dislikes.count }}</b>
+        </a>
+        {% endif %}
+
+        <a href="{% url 'post_detail' post.id %}" class="action-item">
+            <i class="fa-regular fa-comment"></i> <b>{{ post.comments.count }}</b>
+        </a>
+    </div>
+
+</article>
+
+{% empty %}
+<p class="empty-state">Нема чого дивитись...</p>
+{% endfor %}
+
 </main>
 
 {% endblock %}

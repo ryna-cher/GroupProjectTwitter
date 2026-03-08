@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block title %}Видалити профіль{% endblock %}
 
 {% block extra_css %}
@@ -7,19 +8,16 @@
 {% endblock %}
 
 {% block content %}
+<div class="profile-page">
+    <div class="profile-card delete-confirm">
+        <h1 class="delete-title">Видалення профілю</h1>
+        <p class="delete-text">Ви впевнені, що хочете видалити свій профіль? Цю дію не можна скасувати.</p>
 
-<div class="profile-container delete-confirm">
-
-    <h1>Видалення профілю</h1>
-    <p>Ви впевнені, що хочете видалити свій профіль? Цю дію не можна скасувати.</p>
-
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Так, видалити профіль</button>
-    </form>
-
-    <a href="{% url 'profile' %}">Скасувати</a>
-
+        <form method="post" class="delete-form">
+            {% csrf_token %}
+            <button type="submit" class="danger-btn">Так, видалити профіль</button>
+            <a href="{% url 'profile' %}" class="glass-btn">Скасувати</a>
+        </form>
+    </div>
 </div>
-
 {% endblock %}

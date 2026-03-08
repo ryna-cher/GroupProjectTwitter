@@ -3,8 +3,13 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+
     <title>{% block title %}Threads{% endblock %}</title>
 
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
     {% block extra_css %}{% endblock %}
@@ -14,42 +19,44 @@
 
 <div class="main-container">
 
-<header style="display:flex; justify-content:space-between; align-items:center; padding:20px 0; border-bottom:1px solid var(--border-color);">
+<header class="site-header">
 
-    <h1 style="margin:0; font-size:24px;">
-        <a href="{% url 'index' %}" style="text-decoration:none; color:inherit;">Threads</a>
+    <h1 class="logo">
+        <a href="{% url 'index' %}">
+            <i class="fa-brands fa-square-threads threads-icon"></i>
+            Threads
+        </a>
     </h1>
 
     <div class="auth-navigation">
 
         {% if user.is_authenticated %}
-            <div style="display:flex; align-items:center; gap:15px;">
 
-                <span style="color:var(--text-muted); font-size:14px;">
-                    {{ user.username }}
-                </span>
+        <div class="user-controls">
 
-                <a href="{% url 'profile' %}" style="text-decoration:none; font-size:20px;">
-                    👤
-                </a>
+           <span class="username-badge">
+    {{ user.username }}
+</span>
 
-                <form action="{% url 'logout' %}" method="post" style="margin:0;">
-                    {% csrf_token %}
-                    <button type="submit"
-                        style="background:none; border:none; cursor:pointer; font-size:20px;"
-                        title="Вийти">
-                        🚪
-                    </button>
-                </form>
+            <a href="{% url 'profile' %}" class="icon-btn">
+                <i class="fa-regular fa-user"></i>
+            </a>
 
-            </div>
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="icon-btn" title="Вийти">
+                    <i class="fa-solid fa-door-open"></i>
+                </button>
+            </form>
+
+        </div>
 
         {% else %}
 
-            <div style="display:flex; gap:15px;">
-                <a href="{% url 'login' %}" style="text-decoration:none; font-weight:600;">Вхід</a>
-                <a href="{% url 'register' %}" style="text-decoration:none; font-weight:600;">Реєстрація</a>
-            </div>
+        <div class="auth-links">
+            <a href="{% url 'login' %}">Вхід</a>
+            <a href="{% url 'register' %}">Реєстрація</a>
+        </div>
 
         {% endif %}
 
@@ -66,7 +73,7 @@
 </main>
 
 
-<footer style="margin-top:40px; padding:20px 0; border-top:1px solid var(--border-color); text-align:center; color:var(--text-muted); font-size:14px;">
+<footer class="site-footer">
     <p>Threads</p>
 </footer>
 
