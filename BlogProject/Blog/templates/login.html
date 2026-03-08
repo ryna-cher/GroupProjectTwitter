@@ -2,38 +2,38 @@
 {% load static %}
 {% block title %}Вхід{% endblock %}
 
-{% block content %}
-
-<div class="auth-container">
-
-<h2>Вхід</h2>
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/auth.css' %}">
 {% endblock %}
-<form method="post" class="auth-form">
 
-{% csrf_token %}
+{% block content %}
 
-<div class="form-group">
-<label>Username</label>
-{{ form.username }}
-</div>
+<div class="auth-container dark-glass">
 
-<div class="form-group">
-<label>Password</label>
-{{ form.password }}
-</div>
+    <h2>Вхід</h2>
 
-<button type="submit" class="auth-btn">
-Увійти
-</button>
+    <form method="post" class="auth-form">
+        {% csrf_token %}
 
-</form>
+        <div class="form-group">
+            <label>Username</label>
+            {{ form.username }}
+        </div>
 
-<p class="auth-switch">
-Ще немає акаунта?
-<a href="{% url 'register' %}">Зареєструватися</a>
-</p>
+        <div class="form-group">
+            <label>Password</label>
+            {{ form.password }}
+        </div>
+
+        <button type="submit" class="auth-btn">
+            Увійти
+        </button>
+    </form>
+
+    <p class="auth-switch">
+        Ще немає акаунта?
+        <a href="{% url 'register' %}">Зареєструватися</a>
+    </p>
 
 </div>
 

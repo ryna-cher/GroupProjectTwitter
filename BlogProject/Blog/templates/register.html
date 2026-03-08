@@ -2,53 +2,54 @@
 {% load static %}
 {% block title %}Реєстрація{% endblock %}
 
-{% block content %}
-
-<div class="auth-container">
-
-<h2>Створити акаунт</h2>
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/auth.css' %}">
 {% endblock %}
-<form method="post" enctype="multipart/form-data" class="auth-form">
 
-{% csrf_token %}
+{% block content %}
 
-<div class="form-group">
-<label>Username</label>
-{{ form.username }}
-</div>
+<div class="auth-container dark-glass">
 
-<div class="form-group">
-<label>Email</label>
-{{ form.email }}
-</div>
+    <h2>Створити акаунт</h2>
 
-<div class="form-group">
-<label>Avatar</label>
-{{ form.avatar }}
-</div>
+    <form method="post" enctype="multipart/form-data" class="auth-form">
+        {% csrf_token %}
 
-<div class="form-group">
-<label>Password</label>
-{{ form.password1 }}
-</div>
+        <div class="form-group">
+            <label>Username</label>
+            {{ form.username }}
+        </div>
 
-<div class="form-group">
-<label>Repeat password</label>
-{{ form.password2 }}
-</div>
+        <div class="form-group">
+            <label>Email</label>
+            {{ form.email }}
+        </div>
 
-<button type="submit" class="auth-btn">
-Зареєструватися
-</button>
+        <div class="form-group">
+            <label>Avatar</label>
+            {{ form.avatar }}
+        </div>
 
-</form>
+        <div class="form-group">
+            <label>Password</label>
+            {{ form.password1 }}
+        </div>
 
-<p class="auth-switch">
-Вже є акаунт?
-<a href="{% url 'login' %}">Увійти</a>
-</p>
+        <div class="form-group">
+            <label>Repeat password</label>
+            {{ form.password2 }}
+        </div>
+
+        <button type="submit" class="auth-btn">
+            Зареєструватися
+        </button>
+
+    </form>
+
+    <p class="auth-switch">
+        Вже є акаунт?
+        <a href="{% url 'login' %}">Увійти</a>
+    </p>
 
 </div>
 
