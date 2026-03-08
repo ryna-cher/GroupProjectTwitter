@@ -83,6 +83,18 @@ def like_post(request, pk):
 
 
 @login_required
+def toggle_dislike(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    user = request.user
+    if user in post.dislikes.all():
+        post.dislikes.remove(user)
+    else:
+        post.dislikes.add(user)
+        if user in post.likes.all():
+            post.likes.remove(user)
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
+
+@login_required
 def add_comment(request, pk):
 
     post = get_object_or_404(Post, pk=pk)

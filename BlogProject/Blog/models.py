@@ -23,6 +23,11 @@ class Post(models.Model):
         related_name='liked_posts',
         blank=True
     )
+    dislikes = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='disliked_posts',
+        blank=True
+    )
 
     def __str__(self):
         return f'Post {self.id} by {self.author}'
